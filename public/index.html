@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"
+        />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta content="telephone=no,email=no" name="format-detection" />
+        <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+        <script src="https://cdn.dingxiang-inc.com/ctu-group/captcha-ui/index.js"></script>
+        <!-- <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js" id="old_wx_js"></script> -->
+        <script src="https://res2.wx.qq.com/open/js/jweixin-1.6.0.js " id="old_wx_js"></script>
+        <script
+            src="https://imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer-2.3.2.js"
+            charset="utf-8"
+        ></script>
+        <title></title>
+    </head>
+
+    <body>
+        <noscript>
+            <strong
+                >We're sorry but project doesn't work properly without
+                JavaScript enabled. Please enable it to continue.</strong
+            >
+        </noscript>
+        <div id="app"></div>
+
+        <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script>
+            $(function() {
+                var ua = navigator.userAgent.toLowerCase();
+                if (ua.match(/MicroMessenger/i) != "micromessenger") {
+                    return;
+                }
+                var ajaxUrl =
+                    "https://api2.yuelvhui.com/app/WechatShareH5?share_url=" +
+                    encodeURIComponent(window.location.href);
+                $.ajax({
+                    url: ajaxUrl,
+                    type: "GET",
+                    dataType: "jsonp",
+                    success: function(data) {
+                        wx.config({
+                            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                            appId: data.app_id, // 必填，企业号的唯一标识，此处填写企业号corpid
+                            timestamp: data.timestamp, // 必填，生成签名的时间戳
+                            nonceStr: data.noncestr, // 必填，生成签名的随机串
+                            signature: data.signature, // 必填，签名，见附录1
+                            jsApiList: [
+                                "onMenuShareTimeline",
+                                "onMenuShareAppMessage",
+                            ], // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                        });
+                        wx.ready(function() {
+                            wx.onMenuShareTimeline({
+                                //分享到朋友圈
+                                title: "悦淘商城", // 分享标题
+                                desc: "精致生活的美好体验", // 分享描述
+                                link: 'https://web.yuetao.group/', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                                imgUrl:
+                                    "https://yuetao-1300766538.cos.ap-beijing.myqcloud.com/yuetao/image/2020-02-17/13/yuelvhuiQJwXComJ821581918103.jpg", // 分享图标
+                            });
+                            wx.onMenuShareAppMessage({
+                                //分享给朋友
+                                title: "悦淘商城", // 分享标题
+                                desc: "精致生活的美好体验", // 分享描述
+                                link: 'https://web.yuetao.group/', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                                imgUrl:
+                                    "https://yuetao-1300766538.cos.ap-beijing.myqcloud.com/yuetao/image/2020-02-17/13/yuelvhuiQJwXComJ821581918103.jpg", // 分享图标
+                            });
+                        });
+                    },
+                });
+            });
+        </script>
+    </body>
+</html>
